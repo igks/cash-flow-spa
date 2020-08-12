@@ -19,7 +19,7 @@ const Login = () => {
     }
     if (res.status === "error") {
       res.data.errors.map((data) => {
-        setAlert(dispatch, data.msg, "danger");
+        return setAlert(dispatch, data.msg, "danger");
       });
     }
   };

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Link, Redirect } from "react-router-dom";
 import { signUp } from "../services/apiService";
+import { setAlert } from "../redux/actions/alert";
 
 const SignUp = () => {
+  const dispatch = useDispatch();
   const { register, handleSubmit, errors } = useForm();
-
   const [isRegistered, setIsRegistered] = useState(false);
 
   const onSubmit = async (data) => {
@@ -13,10 +15,11 @@ const SignUp = () => {
     if (res.status === "ok") {
       localStorage.setItem("token", res.data.token);
       setIsRegistered(true);
+      setAlert(dispatch, "Register success!", "success");
     }
     if (res.status === "error") {
       res.data.errors.map((data) => {
-        return alert(data.msg);
+        return setAlert(dispatch, data.msg, "danger");
       });
     }
   };
