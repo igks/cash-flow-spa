@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, Redirect } from "react-router-dom";
 import { login } from "../services/apiService";
+import { setAlert } from "../redux/actions/alert";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const { register, handleSubmit, errors } = useForm();
   const [isLogin, setIsLogin] = useState(false);
 
@@ -11,11 +14,12 @@ const Login = () => {
     const res = await login(data);
     if (res.status === "ok") {
       localStorage.setItem("token", res.data.token);
+      setAlert(dispatch, "Login success.", "success");
       setIsLogin(true);
     }
     if (res.status === "error") {
       res.data.errors.map((data) => {
-        return alert(data.msg);
+        setAlert(dispatch, data.msg, "danger");
       });
     }
   };
