@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 
 const Alert = () => {
   const alerts = useSelector((state) => state.alert);
-  console.log(alerts);
   return (
     <div className="container fixed-bottom">
       {alerts !== null &&

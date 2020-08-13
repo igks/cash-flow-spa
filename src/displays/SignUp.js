@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Link, Redirect } from "react-router-dom";
 import { signUp } from "../services/apiService";
 import { setAlert } from "../redux/actions/alert";
+import { registerSuccess, registerFail } from "../redux/actions/auth";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -14,13 +15,15 @@ const SignUp = () => {
     const res = await signUp(data);
     if (res.status === "ok") {
       localStorage.setItem("token", res.data.token);
-      setIsRegistered(true);
       setAlert(dispatch, "Register success!", "success");
+      registerSuccess(dispatch);
+      setIsRegistered(true);
     }
     if (res.status === "error") {
       res.data.errors.map((data) => {
         return setAlert(dispatch, data.msg, "danger");
       });
+      registerFail(dispatch);
     }
   };
 
@@ -29,7 +32,7 @@ const SignUp = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="text-center bg-primary p-2 my-3 rounded text-light">
           <h4>User Sign Up</h4>
@@ -93,7 +96,7 @@ const SignUp = () => {
       </form>
       <p className="mt-5 text-center">
         Have an account?
-        <Link to="/"> Please Login</Link>
+        <Link to="/login"> Please Login</Link>
       </p>
     </div>
   );
